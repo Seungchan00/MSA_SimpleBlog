@@ -12,7 +12,6 @@ public class PostDeleted extends AbstractEvent {
     private Long id;
     private String title;
     private String content;
-    private Object commentList;
     private String nickname;
     private Long userId;
 }

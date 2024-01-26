@@ -5,17 +5,20 @@ import blog.domain.PostCreated;
 import blog.domain.PostDeleted;
 import blog.domain.PostEdited;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
+
 import lombok.Data;
 
 @Entity
 @Table(name = "Post_table")
 @Data
-// <<< DDD / Aggregate Root
+//<<< DDD / Aggregate Root
 public class Post {
 
     @Id
@@ -53,58 +56,43 @@ public class Post {
 
     public static PostRepository repository() {
         PostRepository postRepository = PostApplication.applicationContext.getBean(
-                PostRepository.class);
+            PostRepository.class
+        );
         return postRepository;
     }
 
-    // <<< Clean Arch / Port Method
+    
+
+    @Transactional
     public static void commentCreateOnPost(CommentCreated commentCreated) {
-        // implement business logic here:
 
-        /**
-         * Example 1: new item
-         * Post post = new Post();
-         * repository().save(post);
-         * 
-         */
+        
+        repository().findById(commentCreated.getPostId()).ifPresent(post->{ // repository에서 postId 와 일치하는 값을 post에 가져온다.  
+            
+            List<Long> newCommentList = new ArrayList<>(post.getCommentList());     // 새로운 arrayList에 생성하고, 기존에 있던 commnetList를 넣는다. 
+            newCommentList.add(commentCreated.getUserId());                             // newCommenList리스트에 commectCreated의id를 추가한다.
+            post.setCommentList(newCommentList);                                    // 기존의 commentList를 newCommentList로 set한다.
+            
+            repository().save(post);                           // 저장한다.
 
-        /**
-         * Example 2: finding and process
-         * 
-         * repository().findById(1).ifPresent(post->{
-         * 
-         * post // do something
-         * repository().save(post);
-         * 
-         * 
-         * });
-         */
+         });
 
     }
 
-    // >>> Clean Arch / Port Method
-    // <<< Clean Arch / Port Method
+    //>>> Clean Arch / Port Method
+    //<<< Clean Arch / Port Method
+    @Transactional
     public static void commentDeleteOnPost(CommentDeleted commentDeleted) {
-        // implement business logic here:
+     
+        
+        repository().findById(commentDeleted.getPostId()).ifPresent(post->{
+            
+            List<Long> newCommentList = new ArrayList<>(post.getCommentList());
+            newCommentList.remove(commentDeleted.getUserId());
+            post.setCommentList(newCommentList);  
+            repository().save(post);
 
-        /**
-         * Example 1: new item
-         * Post post = new Post();
-         * repository().save(post);
-         * 
-         */
-
-        /**
-         * Example 2: finding and process
-         * 
-         * repository().findById(commentDeleted.get???()).ifPresent(post->{
-         * 
-         * post // do something
-         * repository().save(post);
-         * 
-         * 
-         * });
-         */
+         });
 
     }
 

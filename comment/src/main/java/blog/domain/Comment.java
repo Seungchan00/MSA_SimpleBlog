@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
+
 import lombok.Data;
 
 @Entity
@@ -48,34 +50,21 @@ public class Comment {
         return commentRepository;
     }
 
-    // <<< Clean Arch / Port Method
+
+    @Transactional
     public static void deleteAllComments(PostDeleted postDeleted) {
-        // implement business logic here:
+               
+        List<Comment> comments = repository().findAllByPostId(postDeleted.getId()); 
+          
 
-        /**
-         * Example 1: new item
-         * Comment comment = new Comment();
-         * repository().save(comment);
-         * 
-         * AllCommentsDeleted allCommentsDeleted = new AllCommentsDeleted(comment);
-         * allCommentsDeleted.publishAfterCommit();
-         */
+            repository().deleteAll(comments);
 
-        /**
-         * Example 2: finding and process
-         * 
-         * repository().findById(postDeleted.get???()).ifPresent(comment->{
-         * 
-         * comment // do something
-         * repository().save(comment);
-         * 
-         * AllCommentsDeleted allCommentsDeleted = new AllCommentsDeleted(comment);
-         * allCommentsDeleted.publishAfterCommit();
-         * 
-         * });
-         */
-
+            AllCommentsDeleted allCommentsDeleted = new AllCommentsDeleted(comments);
+            allCommentsDeleted.publishAfterCommit();
+          
+         
     }
+        
 
     // 안치윤 : 유저 정보가 업데이트 되었을 때, 댓글 정보도 업데이트하는 메서드.
     public static void updateUser(UserUpdated userUpdated) {

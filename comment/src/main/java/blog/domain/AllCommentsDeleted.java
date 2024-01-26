@@ -17,9 +17,11 @@ public class AllCommentsDeleted extends AbstractEvent {
     private String nickname;
     private Long userId;
 
-    public AllCommentsDeleted(Comment aggregate) {
+    public AllCommentsDeleted(List<Comment> aggregate) {
         super(aggregate);
     }
+    
+    
 
     public AllCommentsDeleted() {
         super();
