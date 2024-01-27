@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource(collectionResourceRel = "dashBoards", path = "dashBoards")
@@ -23,4 +24,9 @@ public interface DashBoardRepository
 
     @Query("SELECT d FROM DashBoard d JOIN d.commentList c WHERE c.userId = :userId")
     List<DashBoard> findByCommentUserId(Long userId);
+
+    @Query("SELECT d FROM DashBoard d JOIN d.commentList c WHERE d.postId = :postId")
+    Optional<DashBoard> findByPostId(@Param("postId") Long postId);
+
+
 }
