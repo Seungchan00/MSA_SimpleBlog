@@ -54,7 +54,11 @@ public class DashBoardViewHandler {
             // 만약 특정 게시글id를 가진 게시글(대시보드)가 존재한다면, 해당 게시글에 댓글을 추가합니다.
             if (dashBoard.isPresent()) {
                 DashBoard new_dashBoard = dashBoard.get();
+<<<<<<< HEAD
                 // 이벤트 객체의 정보를 수신해서 담을 댓글 객체를 선언한 뒤, 수신된 정보로 초기화를 합니다.
+=======
+                // 이벤트 객체의 정보를 수신해서 담을 댓글 객체를 선언한 뒤, 수신된 정보로 초기화를 합니다. 
+>>>>>>> origin/master
                 Comment comment = new Comment();
                 comment.setId(commentCreated.getId());
                 comment.setContent(commentCreated.getContent());
@@ -107,19 +111,33 @@ public class DashBoardViewHandler {
         try {
             if (!userUpdated.validate())
                 return;
+<<<<<<< HEAD
             // 특정 userId를 가진 사용자가 작성한 게시글(여기선 대시보드)목록을 조회합니다.
             List<DashBoard> dashBoard_list = dashBoardRepository.findByPostUserId(userUpdated.getId());
 
             // 특정 userId를 가진 사용자가 작성한 게시글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다.
+=======
+            // 특정 userId를 가진 사용자가 작성한 게시글(여기선 대시보드)목록을 조회합니다. 
+            List<DashBoard> dashBoard_list = dashBoardRepository.findByPostUserId(userUpdated.getId());
+
+            // 특정 userId를 가진 사용자가 작성한 게시글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다. 
+>>>>>>> origin/master
             for (DashBoard new_dashBoard : dashBoard_list) {
                 new_dashBoard.setPostNickname(userUpdated.getNickname());
                 dashBoardRepository.save(new_dashBoard);
             }
 
+<<<<<<< HEAD
             // 특정 userId를 가진 사용자가 작성한 댓글이 담긴 게시글(여기선 대시보드)목록을 조회합니다.
             List<DashBoard> dashBoard_comment_list = dashBoardRepository.findByCommentUserId(userUpdated.getId());
 
             // 특정 userId를 가진 사용자가 작성한 댓글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다.
+=======
+            // 특정 userId를 가진 사용자가 작성한 댓글이 담긴 게시글(여기선 대시보드)목록을 조회합니다.  
+            List<DashBoard> dashBoard_comment_list = dashBoardRepository.findByCommentUserId(userUpdated.getId());
+
+            // 특정 userId를 가진 사용자가 작성한 댓글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다. 
+>>>>>>> origin/master
             for (DashBoard dashBoard_comment : dashBoard_comment_list) {
                 for (Comment comment : dashBoard_comment.getCommentList()) {
                     if (comment.getUserId().equals(userUpdated.getId())) {
@@ -141,8 +159,14 @@ public class DashBoardViewHandler {
         try {
             if (!postDeleted.validate())
                 return;
+<<<<<<< HEAD
             // view 레파지 토리에 삭제 쿼리
             dashBoardRepository.deleteByPostId(postDeleted.getId());
+=======
+
+            dashBoardRepository.deleteByPostId(postDeleted.getId());
+
+>>>>>>> origin/master
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,6 +181,7 @@ public class DashBoardViewHandler {
             // postid로 검색한 DashBoard 엔티티를 조회
             Optional<DashBoard> dashboardOptional = dashBoardRepository.findByPostId(commentDeleted.getPostId());
             if (dashboardOptional.isPresent()) {
+<<<<<<< HEAD
                 DashBoard dashboard = dashboardOptional.get();
                 List<Comment> comments = dashboard.getCommentList();
                 // userId가 일치하는 댓글을 찾아서 삭제
@@ -165,10 +190,23 @@ public class DashBoardViewHandler {
                 dashboard.setCommentList(comments);
                 dashBoardRepository.save(dashboard);
             }
+=======
+            DashBoard dashboard = dashboardOptional.get();
+            List<Comment> comments = dashboard.getCommentList();
+            // userId가 일치하는 댓글을 찾아서 삭제
+            comments.removeIf(comment -> comment.getUserId().equals(commentDeleted.getUserId()));
+            // 변경된 댓글 리스트를 DashBoard에 설정하고 저장
+            dashboard.setCommentList(comments);
+            dashBoardRepository.save(dashboard);
+        }
+>>>>>>> origin/master
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+<<<<<<< HEAD
 
     // >>> DDD / CQRS
+=======
+>>>>>>> origin/master
 }

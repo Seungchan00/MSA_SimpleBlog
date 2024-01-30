@@ -1,13 +1,21 @@
 package blog.domain;
 
+<<<<<<< HEAD
 import blog.domain.*;
 import blog.infra.AbstractEvent;
 import java.time.LocalDate;
 import java.util.*;
+=======
+import blog.infra.AbstractEvent;
+>>>>>>> origin/master
 import lombok.*;
 
 //<<< DDD / Domain Event
 @Data
+<<<<<<< HEAD
+=======
+@EqualsAndHashCode(callSuper=false)
+>>>>>>> origin/master
 @ToString
 public class PostDeleted extends AbstractEvent {
 
@@ -25,4 +33,8 @@ public class PostDeleted extends AbstractEvent {
         super();
     }
 }
+<<<<<<< HEAD
 //>>> DDD / Domain Event
+=======
+//>>> DDD / Domain Event
+>>>>>>> origin/master

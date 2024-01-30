@@ -20,4 +20,8 @@ public class DashBoard {
         // 안치윤 : 필드 수정 및 어노테이션 추가
         @ElementCollection
         private List<Comment> commentList;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/master
