@@ -65,7 +65,6 @@ public class Post {
 
     @Transactional
     public static void commentCreateOnPost(CommentCreated commentCreated) {
-
         
         repository().findById(commentCreated.getPostId()).ifPresent(post->{ // repository에서 postId 와 일치하는 값을 post에 가져온다.  
             

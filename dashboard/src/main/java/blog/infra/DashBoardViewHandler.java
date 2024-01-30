@@ -54,7 +54,7 @@ public class DashBoardViewHandler {
             // 만약 특정 게시글id를 가진 게시글(대시보드)가 존재한다면, 해당 게시글에 댓글을 추가합니다.
             if (dashBoard.isPresent()) {
                 DashBoard new_dashBoard = dashBoard.get();
-                // 이벤트 객체의 정보를 수신해서 담을 댓글 객체를 선언한 뒤, 수신된 정보로 초기화를 합니다. 
+                // 이벤트 객체의 정보를 수신해서 담을 댓글 객체를 선언한 뒤, 수신된 정보로 초기화를 합니다.
                 Comment comment = new Comment();
                 comment.setId(commentCreated.getId());
                 comment.setContent(commentCreated.getContent());
@@ -107,19 +107,19 @@ public class DashBoardViewHandler {
         try {
             if (!userUpdated.validate())
                 return;
-            // 특정 userId를 가진 사용자가 작성한 게시글(여기선 대시보드)목록을 조회합니다. 
+            // 특정 userId를 가진 사용자가 작성한 게시글(여기선 대시보드)목록을 조회합니다.
             List<DashBoard> dashBoard_list = dashBoardRepository.findByPostUserId(userUpdated.getId());
 
-            // 특정 userId를 가진 사용자가 작성한 게시글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다. 
+            // 특정 userId를 가진 사용자가 작성한 게시글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다.
             for (DashBoard new_dashBoard : dashBoard_list) {
                 new_dashBoard.setPostNickname(userUpdated.getNickname());
                 dashBoardRepository.save(new_dashBoard);
             }
 
-            // 특정 userId를 가진 사용자가 작성한 댓글이 담긴 게시글(여기선 대시보드)목록을 조회합니다.  
+            // 특정 userId를 가진 사용자가 작성한 댓글이 담긴 게시글(여기선 대시보드)목록을 조회합니다.
             List<DashBoard> dashBoard_comment_list = dashBoardRepository.findByCommentUserId(userUpdated.getId());
 
-            // 특정 userId를 가진 사용자가 작성한 댓글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다. 
+            // 특정 userId를 가진 사용자가 작성한 댓글(대시보드)에 닉네임을 수정된 닉네임으로 변경합니다.
             for (DashBoard dashBoard_comment : dashBoard_comment_list) {
                 for (Comment comment : dashBoard_comment.getCommentList()) {
                     if (comment.getUserId().equals(userUpdated.getId())) {
@@ -134,6 +134,7 @@ public class DashBoardViewHandler {
             e.printStackTrace();
         }
     }
+
     @Transactional
     @StreamListener(KafkaProcessor.INPUT)
     public void whenPostDeleted_then_DELETE_1(@Payload PostDeleted postDeleted) {
@@ -146,6 +147,7 @@ public class DashBoardViewHandler {
             e.printStackTrace();
         }
     }
+
     @Transactional
     @StreamListener(KafkaProcessor.INPUT)
     public void whenCommentDeleted_then_DELETE_2(@Payload CommentDeleted commentDeleted) {
@@ -155,14 +157,14 @@ public class DashBoardViewHandler {
             // postid로 검색한 DashBoard 엔티티를 조회
             Optional<DashBoard> dashboardOptional = dashBoardRepository.findByPostId(commentDeleted.getPostId());
             if (dashboardOptional.isPresent()) {
-            DashBoard dashboard = dashboardOptional.get();
-            List<Comment> comments = dashboard.getCommentList();
-            // userId가 일치하는 댓글을 찾아서 삭제
-            comments.removeIf(comment -> comment.getUserId().equals(commentDeleted.getUserId()));
-            // 변경된 댓글 리스트를 DashBoard에 설정하고 저장
-            dashboard.setCommentList(comments);
-            dashBoardRepository.save(dashboard);
-        }
+                DashBoard dashboard = dashboardOptional.get();
+                List<Comment> comments = dashboard.getCommentList();
+                // userId가 일치하는 댓글을 찾아서 삭제
+                comments.removeIf(comment -> comment.getUserId().equals(commentDeleted.getUserId()));
+                // 변경된 댓글 리스트를 DashBoard에 설정하고 저장
+                dashboard.setCommentList(comments);
+                dashBoardRepository.save(dashboard);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
