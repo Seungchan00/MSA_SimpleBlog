@@ -97,12 +97,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withClaim("id", serviceUserDetail.getUser().getId())
                 .withClaim("email", serviceUserDetail.getUser().getEmail())
                 .withClaim("roles", serviceUserDetail.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .map(role -> role.trim()) // 각 권한 문자열에서 앞뒤 공백 제거
-
-                        .collect(Collectors.toList())) // 권한 정보 추가
-                // 시크릿 값 설정
-                .sign(Algorithm.HMAC512(JwtProperties.SECRET));
+                .map(GrantedAuthority::getAuthority)
+                .map(role -> role.trim()) // 각 권한 문자열에서 앞뒤 공백 제거
+                .collect(Collectors.toList())) // 권한 정보 추가
+                .sign(Algorithm.HMAC512(JwtProperties.SECRET));// 시크릿 값 설정
+                
         // 쿠키에 토큰 추가
         Cookie cookie = new Cookie("msa", JwtProperties.TOKEN_PREFIX + jwtToken);
         cookie.setMaxAge((int) TimeUnit.MINUTES.toSeconds(550));

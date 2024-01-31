@@ -1,33 +1,17 @@
 package blog.domain;
 
 import blog.CommentApplication;
-<<<<<<< HEAD
-import blog.domain.AllCommentsDeleted;
-import blog.domain.CommentCreated;
-import blog.domain.CommentDeleted;
-import java.time.LocalDate;
-import java.util.Date;
-=======
->>>>>>> origin/master
 import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.persistence.*;
-<<<<<<< HEAD
-import javax.transaction.Transactional;
-=======
 
->>>>>>> origin/master
 
 import lombok.Data;
 
 @Entity
 @Table(name = "Comment_table")
 @Data
-<<<<<<< HEAD
-// <<< DDD / Aggregate Root
-=======
->>>>>>> origin/master
 public class Comment {
 
     @Id
@@ -60,35 +44,18 @@ public class Comment {
         return commentRepository;
     }
 
-<<<<<<< HEAD
-
-    @Transactional
-    public static void deleteAllComments(PostDeleted postDeleted) {
-               
-        List<Comment> comments = repository().findAllByPostId(postDeleted.getId()); 
-          
-
-=======
     // 안치윤 : 게시글 삭제시 해당 게시글에 달린 댓글들 또한 모두 삭제하기
     public static void deleteAllComments(PostDeleted postDeleted) {
 
         List<Comment> comments = repository().findAllByPostId(postDeleted.getId());
 
         if (!comments.isEmpty()) {
->>>>>>> origin/master
             repository().deleteAll(comments);
 
             AllCommentsDeleted allCommentsDeleted = new AllCommentsDeleted(comments);
             allCommentsDeleted.publishAfterCommit();
-<<<<<<< HEAD
-          
-         
-    }
-        
-=======
         }
     }
->>>>>>> origin/master
 
     // 안치윤 : 유저 정보가 업데이트 되었을 때, 댓글 정보도 업데이트하는 메서드.
     public static void updateUser(UserUpdated userUpdated) {
@@ -110,8 +77,4 @@ public class Comment {
             e.printStackTrace();
         }
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/master

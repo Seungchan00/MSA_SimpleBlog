@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-=======
 your:
   jwt:
     secret: cos
->>>>>>> origin/master
-server:
+
   port: 8080
 
 spring:

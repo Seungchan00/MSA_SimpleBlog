@@ -58,7 +58,10 @@ public class Post {
     // 진승찬 : 게시글에 댓글이 달렸을 때, 게시글의 댓글리스트 필드에 댓글 추가하는 메서드
     @Transactional
     public static void commentCreateOnPost(CommentCreated commentCreated) {
-        repository().findById(commentCreated.getPostId()).ifPresent(post -> { 
+
+          
+            Post post = repository().findById(commentCreated.getPostId())
+            .orElseThrow(() -> new NoSuchElementException("Can't find Post with id" + commentCreated.getPostId()));
 
             List<Long> newCommentList = new ArrayList<>(post.getCommentList());
                                                                                 
@@ -67,21 +70,20 @@ public class Post {
 
             repository().save(post);
 
-        });
+        
     }
 
     // 진승찬 : 게시글에 댓글이 삭제되었을 때, 게시글의 댓글리스트 필드에 댓글을 삭제하는 메서드
     @Transactional
     public static void commentDeleteOnPost(CommentDeleted commentDeleted) {
-
-        repository().findById(commentDeleted.getId()).ifPresent(post -> {
-
+        
+        Post post = repository().findById(commentDeleted.getId())
+        .orElseThrow(() -> new NoSuchElementException("Can't find Post with id" + commentDeleted.getPostId()));
+ 
             List<Long> newCommentList = new ArrayList<>(post.getCommentList());
             newCommentList.remove(commentDeleted.getId());
             post.setCommentList(newCommentList);
             repository().save(post);
-
-        });
     }
 
     // 안치윤 : 유저 정보가 업데이트 되었을 때, 게시글 정보도 업데이트하는 메서드
